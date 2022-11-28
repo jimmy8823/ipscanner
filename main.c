@@ -87,11 +87,11 @@ int main(int argc, char* argv[])
 	 *	 You should reset the timer every time before you send a packet.
 	 */
 	dst.sin_family = AF_INET;
-	dst.sin_addr.s_addr = inet_addr("10.0.2.2");
+	dst.sin_addr.s_addr = inet_addr("10.0.2.1");
 	memset(packet,'\0',sizeof(packet));
 	ip_hdr = (struct ip*)packet;
 	icmp_hdr = (struct icmp*)(packet + IP_HDR_LEN);
-	fill_iphdr(ip_hdr,"10.0.2.2");
+	fill_iphdr(ip_hdr,"10.0.2.1");
 	ip_hdr->ip_sum = ((unsigned short *)packet,ip_hdr->ip_hl);
 	fill_icmphdr(icmp_hdr,1);
 	icmp_hdr->icmp_cksum = fill_cksum((unsigned short *)icmp_hdr,sizeof(packet)-sizeof(struct icmp));
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
 	}
 	printf("PING 10.0.2.2 (data size = 10, id = %d, seq = 1, timeout = %d ms)\n",pid,timeout);
 	send_time = clock();
-	while(1){
+	//while(1){
 		/*memset(recv_buffer,'\0',sizeof(recv_buffer));
 		n =recvfrom(recvsock,recv_buffer,sizeof(recv_buffer),0,(struct sockaddr *)&from,&addr_len);
 		ip_hdr = (struct ip*)recv_buffer;
@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
 			break;
 		}*/
 		pcap_get_reply();
-	}
+	//}
 	return 0;
 }
 

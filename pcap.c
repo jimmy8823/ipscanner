@@ -60,8 +60,7 @@ int pcap_init_s(unsigned int timeout , const char* devicename)
 		fprintf(stderr,"%s\n",errbuf);
 		exit(1);
 	}
-	pcap_set_immediate_mode(p,1);
-	pcap_activate(p);
+	
 	/*
 	 *    you should complete your filter string before pcap_compile
 	 */
@@ -71,6 +70,10 @@ int pcap_init_s(unsigned int timeout , const char* devicename)
 		pcap_perror(p,"pcap_settimeout");
 		exit(1);
 	}
+	pcap_set_promisc(p,1);
+	pcap_set_snaplen(p,8000);
+	pcap_set_immediate_mode(p,1);
+	pcap_activate(p);
 	if(pcap_compile(p, &fcode, filter_string, 0, maskp) == -1){
 		pcap_perror(p,"pcap_compile");
 		exit(1);
@@ -81,6 +84,7 @@ int pcap_init_s(unsigned int timeout , const char* devicename)
 		exit(1);
 	}
 	
+	
 	return 0;
 }
 
@@ -89,6 +93,7 @@ int pcap_get_reply( void )
 {
 	const u_char *ptr;
 	ptr = pcap_next(p,&hdr);
+	printf("%s\n",ptr);
 	for(int i=0;i<hdr.len;i++){
 		printf("%02x ",ptr[i]);
 	}
