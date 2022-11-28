@@ -54,18 +54,23 @@ int pcap_init_s(unsigned int timeout , const char* devicename)
 		exit(1);
 	}
 	
-	
-	p = pcap_open_live(devicename, 8000, 1, timeout, errbuf);
+	p = pcap_create(devicename,errbuf);
+	//p = pcap_open_live(devicename, 8000, 1, timeout, errbuf);
 	if(!p){
 		fprintf(stderr,"%s\n",errbuf);
 		exit(1);
 	}
-	
+	pcap_set_immediate_mode(p,1);
+	pcap_activate(p);
 	/*
 	 *    you should complete your filter string before pcap_compile
 	 */
 	strcpy(filter_string,"icmp");
-	
+
+	if(pcap_set_timeout(p,timeout)==-1){
+		pcap_perror(p,"pcap_settimeout");
+		exit(1);
+	}
 	if(pcap_compile(p, &fcode, filter_string, 0, maskp) == -1){
 		pcap_perror(p,"pcap_compile");
 		exit(1);
