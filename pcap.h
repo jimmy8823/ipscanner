@@ -15,6 +15,6 @@
 
 int pcap_init_s(unsigned int timeout,const char* devicename );
 
-int pcap_get_reply( void );
+int pcap_get_reply(int timeout);
 
 #endif
